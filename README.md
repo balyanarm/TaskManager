@@ -7,9 +7,9 @@ It is a WebApi to get/create/delete tasks.
 2. run DbInitializer project to seed the db
 3. run API project 
 
-Swagger UI will will be opened.
+Swagger UI will be opened.
 
-## Default user credantion to Login
+## Default user credantials to Login
 userName - Admin
 
 password - Password1!

@@ -10,5 +10,8 @@ namespace Domain.Services.Tasks
         public Task<TaskDto> CreateTaskAsync(string taskName);
         public Task<TaskDto> DeleteTaskAsync(string taskName);
 
+        public Task<List<TaskDto>> GetAllTasksAsync();
+
+
     }
 }

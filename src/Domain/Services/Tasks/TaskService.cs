@@ -14,7 +14,7 @@ namespace Domain.Services.Tasks
     {
         private readonly IRepository<TaskData> _taskRepository;
         private readonly Configs _configs;
-        public TaskService(IRepository<TaskData> taskRepository, 
+        public TaskService(IRepository<TaskData> taskRepository,
             IOptions<Configs> configs)
         {
             _taskRepository = taskRepository;
@@ -29,6 +29,7 @@ namespace Domain.Services.Tasks
             }
             return new TaskDto()
             {
+                Id = task.Id,
                 Name = task.Name,
                 CreationTime = task.CreationTime
             };
@@ -45,6 +46,7 @@ namespace Domain.Services.Tasks
 
             return new TaskDto()
             {
+                Id = task.Id,
                 Name = task.Name,
                 CreationTime = task.CreationTime
             };
@@ -61,9 +63,24 @@ namespace Domain.Services.Tasks
             await _taskRepository.RemoveAsync(task);
             return new TaskDto()
             {
-              Name = taskName,
-              CreationTime = task.CreationTime
+                Id = task.Id,
+                Name = taskName,
+                CreationTime = task.CreationTime
             };
+        }
+
+        public async Task<List<TaskDto>> GetAllTasksAsync()
+        {
+            var tasks = await _taskRepository.Query
+                .Select(t => new TaskDto()
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        CreationTime = t.CreationTime
+                    })
+                .ToListAsync();
+
+            return tasks;
         }
     }
 }

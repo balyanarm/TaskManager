@@ -19,6 +19,8 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 // Add services to the container.
 ConfigurationManager configuration = builder.Configuration;
 builder.Services.AddDbContext<TaskManagerDbContext>(o => o.UseSqlServer(configuration.GetConnectionString(("DefaultConnection"))));
@@ -80,7 +82,17 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Configs:JwtKey"]))
         };
     });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000");
+        });
+});
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -90,7 +102,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 

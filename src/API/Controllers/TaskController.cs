@@ -2,14 +2,17 @@ using System.Threading.Tasks;
 using Domain.Services.Tasks;
 using Domain.Services.Users;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    //[Authorize]
+    [EnableCors]
     [ApiController]
     [Route("api/[controller]")]
-    public class TaskController : ControllerBase
+    public class 
+        TaskController : ControllerBase
     {
         private readonly ITaskService _taskService;
         public TaskController(ITaskService taskService)
@@ -49,5 +52,13 @@ namespace API.Controllers
             var taskDto = await _taskService.DeleteTaskAsync(taskName);
             return Ok(taskDto);
         }
+
+        [HttpGet]
+        [Route("GetAll")]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _taskService.GetAllTasksAsync());
+        }
+
     }
 }
